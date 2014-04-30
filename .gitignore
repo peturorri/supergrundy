@@ -1,1 +1,4 @@
 superGrundy.py
+*.aux
+*.log
+*.out
