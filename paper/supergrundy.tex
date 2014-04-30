@@ -26,12 +26,15 @@
 \theoremstyle{definition}
 \newtheorem{problem}{Problem}
 \newtheorem*{solution}{Solution}
+\newtheorem{conj}{Conjecture}
+\newtheorem{lemma}{Lemma}
 
 \usepackage{mathtools}
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 
 \usepackage{fullpage}
+\usepackage{pdfpages}
 
 % My macros
 \newcommand{\myd}{\mathrm{d}}
@@ -68,19 +71,19 @@ that does not involve examining the whole game tree.
 \section{Extending Grundy's Game}
 We present two ways extend Grundy's game by allowing more splits and solve some cases.
 
-\section{Fixed splits}
+\section{Fixed number of splits}
 We can extend the game such that for a given natural number $M \geq 2$ at each turn the
-pile must be split into \emph{exactly} $M$ piles no two of which are evenly sized.
+pile must be split into \emph{exactly} $M$ piles, no two of which have the same size.
 
 \subsection{Upper bound}
-It is obvious that if we have a pile of size $n < \sum_{i=0}{M} = \frac{M(M-1)}{2}$ that it is
+It is obvious that if we have a pile of size $n < \sum_{i=0}^{M} i = \frac{M(M+1)}{2}$ that it is
 not possible to split it into $M$ uneven piles. Therefore, for such $n$, $g(n) = 0$.
 However with $n = \frac{M(M-1)}{2}$, the split $1, 2, ..., M$ is valid and will have SG-value 1,
 since the SG-values of all the smaller piles are 0.
 
 We now want to prove that the SG-values cannot increase faster than once for every
-$\sum_{i=1}{M-1} = \frac{(M-1)M}{2}$ increases in $n$, the pile size. We know where the first value
-of 1 appears (at pile size $\frac{M(M-1)}{2}$). To get a value of two we must have at least one of the piles
+$\sum_{i=1}^{M-1} i = \frac{(M-1)M}{2}$ increases in $n$, the pile size. We know that the first value
+of 1 appears at pile size $\frac{M(M+1)}{2}$. To get the first value of 2 we must have at least one of the piles
 with a value of 1. Therefore at least one pile must be of size $\frac{M(M-1)}{2}$. The minimum sizes of
 the remaining piles that give a valid split are $1, 2, ..., M-1$, so the first value 2 can appear at
 first with pile size $\frac{M(M+1)}{2} + \frac{(M-1)M}{2}$, and it does, since all the small piles
@@ -135,7 +138,7 @@ However, there is an apparent pattern by looking at the plot of the first
 2000 values. Most of the values below the main line appear to be on a line of their own. I haven't
 been able to figure out what the pattern is.
 
-\section{"Up to" splits}
+\section{Bounded number of splits}
 We can also extend the game such that we allow the players to choose how many piles to split into,
 with an upper limit $M$ on the number of piles.
 \subsection{$\emph{M} > 4$}
@@ -150,6 +153,27 @@ The smaller values can be read from the graph.
 This case is different from the larger ones due to $n=17$ where a 5-way split is needed to achieve
 the SG-value 0.
 
+
+\section{Open questions}
+
+When $M=3$ we've seen that most values seem to follow a linear trend for both games. However, there
+are a few values that don't follow this trend. Is there a pattern to these and is it similar to
+the rare and common value pattern seen in the regular version of Grundy's game.
+
+Endurtekningar á SG-gildum? man ekki hvað þetta var...
+
+Both of the extensions simplify to Grundy's game when $M=2$. Can what we know of the higher
+$M$s give us insight into Grundy's game?
+
+
+
+\newpage
+
+\begin{figure}
+    \includegraphics[width=\linewidth]{../plots/any3_long.pdf}
+    \caption{Any 3}
+    \label{fig:any3_long}
+\end{figure}
 
 \end{document}
 
