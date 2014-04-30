@@ -4,9 +4,11 @@ for result in $(ls results)
 do
 
     echo '
-    set terminal png size 1400,900
+    #set terminal png size 1400,900
+    #set output "plots/'$result'.png"
 
-    set output "plots/'$result'.png"
+    set terminal postscript eps enhanced color
+    set output "plots/'$result'.eps"
 
     set xlabel "Pile size"
     set ylabel "SG-value"
