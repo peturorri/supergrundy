@@ -23,7 +23,7 @@
 % For defining your own environments
 \usepackage{amsthm}
 
-\theoremstyle{definition}
+\theoremstyle{lemma}
 \newtheorem{problem}{Problem}
 \newtheorem*{solution}{Solution}
 \newtheorem{conj}{Conjecture}
@@ -78,16 +78,33 @@ pile must be split into \emph{exactly} $M$ piles, no two of which have the same 
 \subsection{Upper bound}
 It is obvious that if we have a pile of size $n < \sum_{i=0}^{M} i = \frac{M(M+1)}{2}$ that it is
 not possible to split it into $M$ uneven piles. Therefore, for such $n$, $g(n) = 0$.
-However with $n = \frac{M(M-1)}{2}$, the split $1, 2, ..., M$ is valid and will have SG-value 1,
+However with $n = \frac{M(M+1)}{2}$, the split $1, 2, ..., M$ is valid and will have SG-value 1,
 since the SG-values of all the smaller piles are 0.
+
+\begin{lemma}
+    The first non-zero SG-value appears at pile size $n = \frac{M(M+1)}{2}$.
+\end{lemma}
 
 We now want to prove that the SG-values cannot increase faster than once for every
 $\sum_{i=1}^{M-1} i = \frac{(M-1)M}{2}$ increases in $n$, the pile size. We know that the first value
-of 1 appears at pile size $\frac{M(M+1)}{2}$. To get the first value of 2 we must have at least one of the piles
-with a value of 1. Therefore at least one pile must be of size $\frac{M(M-1)}{2}$. The minimum sizes of
-the remaining piles that give a valid split are $1, 2, ..., M-1$, so the first value 2 can appear at
-first with pile size $\frac{M(M+1)}{2} + \frac{(M-1)M}{2}$, and it does, since all the small piles
+of 1 appears at pile size $\frac{M(M+1)}{2}$. To get the first value of 2 we must have a split where
+at least one of the piles
+has a value of 1. Therefore at least one pile must be of size at least $\frac{M(M-1)}{2}$. The minimum sizes of
+the remaining piles that give a valid split are $1, 2, ..., M-1$, so the minimum pile size where SG-value 2
+can appear is $\frac{M(M+1)}{2} + \frac{(M-1)M}{2}$, and it does, since all the small piles
 have SG-value 0.
+
+\begin{lemma}
+    The first SG-value larger than 1 is 2 and appears at pile size $\frac{M(M+1)}{2} + \frac{(M-1)M}{2}$.
+\end{lemma}
+
+To get further we need the following conjecture that says we don't "skip" any SG-values:
+
+\begin{conj}
+\label{conj:noskip}
+    If a pile of size $n$ has SG-value $k > 0$, then there is a pile of size $n' < n$ with
+    SG-value $k-1$.
+\end{conj}
 
 Let us now assume that for all piles up to a given $n$, the SG-values increase at most at the rate
 of one every $\frac{(M-1)M}{2}$ increases in pile size. Further assume that $n$ is the smallest pile
@@ -101,26 +118,30 @@ split $n$ such that the new piles together have SG-value $l$.
 
 First find the smallest pile $n'$ with SG-value $l$. That is our first pile. We will then split the
 remaining coins into $M-1$ piles such that their total values are 0. If $M-1$ is odd, then take
-one coin and put it in its own pile. It has SG-value 0. We now have an even number of piles remaining
+one coin and put it in its own pile. It has SG-value 0. We now have an even number $m$ of piles remaining
 to fill. Split the remaining coins as evenly as possible into these piles. That means that the
-pile sizes are a sequence $n_1, n_2, ..., n_{M-2}$ such that $n_i - n_{i-1} = 1$ for all $i$ except
+pile sizes are a sequence $n_1, n_2, ..., n_m$ such that $n_i - n_{i-1} = 1$ for all $i$ except
 possibly one, where the difference is 2.
 
-These $M-2$ piles can have at most 2 different SG-values according to the induction hypothesis,
-since $M-1 < \frac{(M-1)M}{2}$ for all $M > 3$ ($M-1$ is the largest possible difference between the sizes).
+These $m$ piles can have at most 2 different SG-values according to the induction hypothesis,
+since $M < \frac{(M-1)M}{2}$ for all $M > 3$ ($M$ is the largest possible difference between the sizes).
 If all the piles have the same size, then their SG-values cancel out and we are done.
 Further, if they have two different SG-values but there's an even number of piles for each value, they
 also cancel out and we are done.
 
+If we are not done yet, then there is an odd number of piles with each SG-value.
 We will fix this by modifying the two largest piles with the lower SG-value. We remove $\frac{(M-1)M}{2} - 3$
 coins from the smaller of these two piles. That will change it from being the second biggest possible
 pile with this SG-value to being the second smallest. The other, larger, pile will increase in SG-value.
+See figure \ref{fig:explanation}.
 Thus we now have an even number of piles with each SG-value. Note that this operation will not
 change these piles into piles of a size already taken, since we move them far enough.
+If there is only one pile with the smaller SG-value, we use the two smallest piles with the
+higher SG-value instead.
 
 There are two cases to consider where we still have piles of even size. The first one is when one of the
 remainder piles is of size 1 and therefore collides with the special pile of size one. If this happens,
-then in fact the remainder piles must be of sizes $1, ..., M-2$, which means we're trying to create
+then the remainder piles must be of sizes $1, ..., M-2$, which means we're trying to create
 an SG-value that is in fact not possible to create, ie $l \geq k$. That's nonsense so we don't need
 to worry about that.
 
@@ -130,9 +151,11 @@ time we pick the first pile to be the largest one with its SG-value. That guaran
 piles cannot collide with it. The rest of the process is the same.
 
 \subsection{\emph{M} = 3}
-Clearly from the data, the previous does not hold for $M=3$. The proof fails when the two remainder
+Clearly from the data, the previous does not hold for $M=3$ (see fig. \ref{fig:fixed3_long}).
+The proof fails when the two remainder
 piles are of an uneven size and do not have the same SG-value. We cannot as easily move coins around
-in that case.
+in that case. For example, the first $n$ to fail is 13. With the previous method the split would be
+$1 - 5 - 7$, with respective SG-values $0 - 0 - 1$ and no way to apply the method.
 
 However, there is an apparent pattern by looking at the plot of the first
 2000 values. Most of the values below the main line appear to be on a line of their own. I haven't
@@ -141,26 +164,35 @@ been able to figure out what the pattern is.
 \section{Bounded number of splits}
 We can also extend the game such that we allow the players to choose how many piles to split into,
 with an upper limit $M$ on the number of piles.
-\subsection{$\emph{M} > 4$}
-The SG-value for a pile of size $n \geq 9$ appears to be $n-4$.
-For smaller piles the SG-values can be read from the graphs.
 
-Note that it is enough to prove this for the case $M = 5$. The larger cases follow, since they can
-simply choose the splits in the $M=5$ case.
+\subsection{$\emph{M} > 4$}
+\begin{conj}
+\label{conj:any4plus}
+The SG-value for a pile of size $n \geq 9$ is $n-4$.
+For smaller piles the SG-values can be read from figure \ref{fig:any5}.
+\end{conj}
+
+Note that if we believe conjecture \ref{conj:noskip} (no skipping values) also applies in this
+extension of the game, then it is enough to prove this for the case $M = 5$. The conjecture implies
+that the SG-value increases at most by one for every increase in pile size. Since conjecture
+\ref{conj:any4plus} says we do indeed reach that slope, the larger cases can simply choose the
+splits from the $M=5$ case.
+
 \subsection{\emph{M} = 4}
 The SG-value for a pile of size $n\geq 17$ appears to be $n-5$.
-The smaller values can be read from the graph.
+The smaller values can be read from figure \ref{fig:any4}.
 This case is different from the larger ones due to $n=17$ where a 5-way split is needed to achieve
 the SG-value 0.
 
 
 \section{Open questions}
 
-When $M=3$ we've seen that most values seem to follow a linear trend for both games. However, there
+When $M=3$ we can see from figs. \ref{fig:any3_long} and \ref{fig:fixed3_long} that most values
+seem to follow a linear trend for both games. However, there
 are a few values that don't follow this trend. Is there a pattern to these and is it similar to
 the rare and common value pattern seen in the regular version of Grundy's game.
 
-Endurtekningar á SG-gildum? man ekki hvað þetta var...
+In the $M=3$ case, some SG-values are repeated. What is the pattern of these repetitions?
 
 Both of the extensions simplify to Grundy's game when $M=2$. Can what we know of the higher
 $M$s give us insight into Grundy's game?
@@ -170,9 +202,39 @@ $M$s give us insight into Grundy's game?
 \newpage
 
 \begin{figure}
+    \caption{Graphical explanation of a splitting process.}
+    \includegraphics[width=\linewidth]{explanation.pdf}
+    \label{fig:explanation}
+\end{figure}
+
+\begin{figure}
+    \caption{SG-values where up to 4 splits are allowed.}
+    \includegraphics[width=\linewidth]{../plots/any4.pdf}
+    \label{fig:any4}
+\end{figure}
+
+\begin{figure}
+    \caption{SG-values where up to 3 splits are allowed.}
     \includegraphics[width=\linewidth]{../plots/any3_long.pdf}
-    \caption{Any 3}
     \label{fig:any3_long}
+\end{figure}
+
+\begin{figure}
+    \caption{SG-values where exactly 3 splits are allowed.}
+    \includegraphics[width=\linewidth]{../plots/fixed3_long.pdf}
+    \label{fig:fixed3_long}
+\end{figure}
+
+\begin{figure}
+    \caption{SG-values where up to 5 splits are allowed.}
+    \includegraphics[width=\linewidth]{../plots/any6.pdf}
+    \label{fig:any5}
+\end{figure}
+
+\begin{figure}
+    \caption{SG-values exactly 5 splits are allowed.}
+    \includegraphics[width=\linewidth]{../plots/fixed6.pdf}
+    \label{fig:fixed5}
 \end{figure}
 
 \end{document}

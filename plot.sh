@@ -7,7 +7,7 @@ do
     #set terminal png size 1400,900
     #set output "plots/'$result'.png"
 
-    set terminal postscript eps enhanced color
+    set terminal postscript eps enhanced color size 7,4.5
     set output "plots/'$result'.eps"
 
     set xlabel "Pile size"
