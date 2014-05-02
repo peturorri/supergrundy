@@ -1,0 +1,22 @@
+This repository contains the tools for exploring some extensions
+of Grundy's game and some results.
+
+
+The paper folder contains latex source and pdf with explanations
+and some results.
+
+superGrundy.sage contains the code to calculate the SG-values of the
+extensions.
+
+startjobs.sh starts several jobs to calculate SG-values of extensions.
+
+plot.sh contains code to turn the results into graphs with gnuplot.
+
+pdfplot.sh turns the gnuplot output into pdf.
+
+investigate.sh is just scratch space for calculating some values
+for investigation by hand.
+
+The results folder contains the raw output of calculations.
+
+The plots folder contains the plots.
