@@ -1,10 +1,15 @@
 import java.util.LinkedList;
 import java.util.Collections;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.HashMap;
 
 public class SuperGrundy {
 
     public static boolean report = false;
-    public static int MAX_CALCULATION = 20;
+    public static int MAX_CALCULATION = 60;
+
+    private static HashMap<Integer, Integer> cachedSG =
+        new HashMap<Integer, Integer>();
 
     public static int nimSum(LinkedList<Integer> l) {
         if(l.size() == 0) {
@@ -117,6 +122,10 @@ public class SuperGrundy {
             return 0;
         }
 
+        if(cachedSG.containsKey(n)) {
+            return cachedSG.get(n);
+        }
+
         LinkedList<Integer> followSG = new LinkedList<Integer>();
 
         for(LinkedList<Integer> part : partitionFixed(n, split)) {
@@ -135,7 +144,9 @@ public class SuperGrundy {
             System.out.println(" | mex: " + mex(followSG));
         }
 
-        return mex(followSG);
+        int ret = mex(followSG);
+        cachedSG.put(n, ret);
+        return ret;
     }
 
     public static int superGrundyAny(int n, int maxSplit) {
@@ -146,6 +157,10 @@ public class SuperGrundy {
 
         if(n <= 2) {
             return 0;
+        }
+
+        if(cachedSG.containsKey(n)) {
+            return cachedSG.get(n);
         }
 
         LinkedList<Integer> followSG = new LinkedList<Integer>();
@@ -166,7 +181,9 @@ public class SuperGrundy {
             System.out.println(" | mex: " + mex(followSG));
         }
 
-        return mex(followSG);
+        int ret = mex(followSG);
+        cachedSG.put(n, ret);
+        return ret;
     }
 
     public static void main(String[] args) {

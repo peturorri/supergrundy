@@ -24,11 +24,11 @@ def superGrundy(n, M=Infinity, report=False):
 	followSG = []
 	for part in Partitions(n, max_slope=-1, min_length=2, max_length=M):
 		if report:
-			print n, part, nim_sum(map( lambda x : superGrundy(x,M), part ))
+			print ">>>", n, part, nim_sum(map( lambda x : superGrundy(x,M), part ))
 		followSG.append(nim_sum(map( lambda x : superGrundy(x,M), part )))
 
 	if report:
-		print followSG
+		print "Follows for", n, followSG
 
 	return mex(followSG)
 
@@ -40,7 +40,7 @@ def superGrundyFixedLen(n, M=2, report=False):
 	followSG = []
 	for part in Partitions(n, max_slope=-1, length=M):
 		if report:
-			print n, part, nim_sum(map( lambda x : superGrundyFixedLen(x,M), part ))
+			print ">>>", n, part, nim_sum(map( lambda x : superGrundyFixedLen(x,M), part ))
 		followSG.append(nim_sum(map( lambda x : superGrundyFixedLen(x,M), part )))
 
 	if report:
@@ -52,7 +52,8 @@ def superGrundyFixedLen(n, M=2, report=False):
 
 if __name__ == "__main__":
     import sys
-    MAX_CALCULATION = 10000
+    MAX_CALCULATION = 60
+    REPORT = False
     if len(sys.argv) < 3:
         print "Usage:", sys.argv[0], "<mode> <M>"
         print "    where mode is 0 for any split and 1 for fixed split"
@@ -67,7 +68,7 @@ if __name__ == "__main__":
         print "Calculating SG values for any split with M =", sys.argv[2]
         i = 0
         while i < MAX_CALCULATION:
-            print superGrundy(i, int(sys.argv[2]))
+            print superGrundy(i, int(sys.argv[2]), REPORT)
             i += 1
             sys.stdout.flush()
 
@@ -75,7 +76,7 @@ if __name__ == "__main__":
         print "Calculating SG values for fixed split with M =", sys.argv[2]
         i = 0
         while i < MAX_CALCULATION:
-            print superGrundyFixedLen(i, int(sys.argv[2]))
+            print superGrundyFixedLen(i, int(sys.argv[2]), REPORT)
             i += 1
             sys.stdout.flush()
 

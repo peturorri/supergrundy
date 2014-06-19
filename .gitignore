@@ -2,3 +2,5 @@ superGrundy.py
 *.aux
 *.log
 *.out
+*.class
+.*.swp
