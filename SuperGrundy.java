@@ -82,7 +82,10 @@ public class SuperGrundy {
         }
 
         for (int i = Math.min(max, n); i >= 1; i--) {
-            //l.append(partition(n-i, i, prefix + " " + i));
+            // Ensure the slope. There might be a better (non-branching) way of doing this, but this works.
+            if(prefix.size() > 0 && i == prefix.get(prefix.size()-1)) {
+                continue;
+            }
             ArrayList<Integer> newPrefix = (ArrayList<Integer>)prefix.clone();
             newPrefix.add(i);
             for(ArrayList<Integer> m : partition(n-i, i, newPrefix)) {
@@ -212,8 +215,8 @@ public class SuperGrundy {
         }
 
 
-        /*
-        ArrayList<ArrayList<Integer>> p = partition(M);
+        /* Test code for the partition function.
+        ArrayList<ArrayList<Integer>> p = partition(M, M, new ArrayList<Integer>());
         for(ArrayList<Integer> l : p) {
             for(Integer i : l) {
                 System.out.print(" " + i);
@@ -222,9 +225,9 @@ public class SuperGrundy {
         }
 
         System.exit(0);
-        */
+        //*/
 
-        /*
+        /* Test code for the mex function.
         ArrayList<Integer> x = new ArrayList<Integer>();
         x.add(2);
         x.add(4);
@@ -234,7 +237,8 @@ public class SuperGrundy {
         System.out.println(mex(x));
         System.exit(0);
         //*/
-        /*
+
+        /* Test code for the nimSum function.
         ArrayList<Integer> x = new ArrayList<Integer>();
         x.add(2);
         x.add(4);
@@ -242,7 +246,7 @@ public class SuperGrundy {
         x.add(1);
         System.out.println(nimSum(x));
         System.exit(0);
-        */
+        //*/
 
 
         String mode = args[0];
