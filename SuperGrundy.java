@@ -1,6 +1,5 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.HashMap;
 
 public class SuperGrundy {
@@ -11,7 +10,7 @@ public class SuperGrundy {
     private static HashMap<Integer, Integer> cachedSG =
         new HashMap<Integer, Integer>();
 
-    public static int nimSum(LinkedList<Integer> l) {
+    public static int nimSum(ArrayList<Integer> l) {
         if(l.size() == 0) {
             return 0;
         }
@@ -23,7 +22,7 @@ public class SuperGrundy {
         return ns;
     }
 
-    public static boolean checkSlope(LinkedList<Integer> l) {
+    public static boolean checkSlope(ArrayList<Integer> l) {
         int last = Integer.MAX_VALUE;
         for(Integer i : l) {
             if(!(last > i)) {
@@ -34,13 +33,13 @@ public class SuperGrundy {
         return true;
     }
 
-    public static LinkedList<LinkedList<Integer>> partitionFixed(int n, int len) {
-        LinkedList<LinkedList<Integer>> x = partition(n, n, new LinkedList<Integer>());
+    public static ArrayList<ArrayList<Integer>> partitionFixed(int n, int len) {
+        ArrayList<ArrayList<Integer>> x = partition(n, n, new ArrayList<Integer>());
         // We don't want the trivial one element partition.
-        x.remove();
+        x.remove(0);
         // Remove permutations which are not of correct length or have repeat elements.
-        LinkedList<LinkedList<Integer>> purified = new LinkedList<LinkedList<Integer>>();
-        for(LinkedList<Integer> l : x) {
+        ArrayList<ArrayList<Integer>> purified = new ArrayList<ArrayList<Integer>>();
+        for(ArrayList<Integer> l : x) {
             if(l.size() == len && checkSlope(l)) {
                 purified.add(l);
             }
@@ -48,16 +47,17 @@ public class SuperGrundy {
         if(report) {
             System.out.println("Partitions of " + n + ": " + purified);
         }
+
         return purified;
     }
 
-    public static LinkedList<LinkedList<Integer>> partitionAny(int n, int maxLen) {
-        LinkedList<LinkedList<Integer>> x = partition(n, n, new LinkedList<Integer>());
+    public static ArrayList<ArrayList<Integer>> partitionAny(int n, int maxLen) {
+        ArrayList<ArrayList<Integer>> x = partition(n, n, new ArrayList<Integer>());
         // We don't want the trivial one element partition.
-        x.remove();
+        x.remove(0);
         // Remove permutations which are too long or have repeat elements.
-        LinkedList<LinkedList<Integer>> purified = new LinkedList<LinkedList<Integer>>();
-        for(LinkedList<Integer> l : x) {
+        ArrayList<ArrayList<Integer>> purified = new ArrayList<ArrayList<Integer>>();
+        for(ArrayList<Integer> l : x) {
             if(l.size() <= maxLen && checkSlope(l)) {
                 purified.add(l);
             }
@@ -65,33 +65,35 @@ public class SuperGrundy {
         if(report) {
             System.out.println("Partitions of " + n + ": " + purified);
         }
+
         return purified;
     }
 
     // Suppress the warnings about unchecked casts in this method
     // (we're casting the results of 'clone' and should be safe)
     @SuppressWarnings("unchecked")
-    public static LinkedList<LinkedList<Integer>> partition(int n, int max,
-            LinkedList<Integer> prefix)
+    public static ArrayList<ArrayList<Integer>> partition(int n, int max,
+            ArrayList<Integer> prefix)
     {
-        LinkedList<LinkedList<Integer>> l = new LinkedList<LinkedList<Integer>>();
+        ArrayList<ArrayList<Integer>> l = new ArrayList<ArrayList<Integer>>();
         if (n == 0) {
-            l.add((LinkedList<Integer>)prefix.clone());
+            l.add(prefix);
             return l;
         }
 
         for (int i = Math.min(max, n); i >= 1; i--) {
             //l.append(partition(n-i, i, prefix + " " + i));
-            LinkedList<Integer> newPrefix = (LinkedList<Integer>)prefix.clone();
+            ArrayList<Integer> newPrefix = (ArrayList<Integer>)prefix.clone();
             newPrefix.add(i);
-            for(LinkedList<Integer> m : partition(n-i, i, newPrefix)) {
-                l.add((LinkedList<Integer>)m.clone());
+            for(ArrayList<Integer> m : partition(n-i, i, newPrefix)) {
+                l.add(m);
             }
         }
+
         return l;
     }
 
-    public static int mex(LinkedList<Integer> l) {
+    public static int mex(ArrayList<Integer> l) {
         if(l.size() == 0) {
             return 0;
         }
@@ -126,10 +128,10 @@ public class SuperGrundy {
             return cachedSG.get(n);
         }
 
-        LinkedList<Integer> followSG = new LinkedList<Integer>();
+        ArrayList<Integer> followSG = new ArrayList<Integer>();
 
-        for(LinkedList<Integer> part : partitionFixed(n, split)) {
-            LinkedList<Integer> sgValues = new LinkedList<Integer>();
+        for(ArrayList<Integer> part : partitionFixed(n, split)) {
+            ArrayList<Integer> sgValues = new ArrayList<Integer>();
             for(Integer m : part) {
                 sgValues.add(superGrundyFixed(m, split));
             }
@@ -163,10 +165,10 @@ public class SuperGrundy {
             return cachedSG.get(n);
         }
 
-        LinkedList<Integer> followSG = new LinkedList<Integer>();
+        ArrayList<Integer> followSG = new ArrayList<Integer>();
 
-        for(LinkedList<Integer> part : partitionAny(n, maxSplit)) {
-            LinkedList<Integer> sgValues = new LinkedList<Integer>();
+        for(ArrayList<Integer> part : partitionAny(n, maxSplit)) {
+            ArrayList<Integer> sgValues = new ArrayList<Integer>();
             for(Integer m : part) {
                 sgValues.add(superGrundyAny(m, maxSplit));
             }
@@ -211,8 +213,8 @@ public class SuperGrundy {
 
 
         /*
-        LinkedList<LinkedList<Integer>> p = partition(M);
-        for(LinkedList<Integer> l : p) {
+        ArrayList<ArrayList<Integer>> p = partition(M);
+        for(ArrayList<Integer> l : p) {
             for(Integer i : l) {
                 System.out.print(" " + i);
             }
@@ -223,7 +225,7 @@ public class SuperGrundy {
         */
 
         /*
-        LinkedList<Integer> x = new LinkedList<Integer>();
+        ArrayList<Integer> x = new ArrayList<Integer>();
         x.add(2);
         x.add(4);
         x.add(0);
@@ -233,7 +235,7 @@ public class SuperGrundy {
         System.exit(0);
         //*/
         /*
-        LinkedList<Integer> x = new LinkedList<Integer>();
+        ArrayList<Integer> x = new ArrayList<Integer>();
         x.add(2);
         x.add(4);
         x.add(3);
