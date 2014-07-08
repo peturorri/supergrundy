@@ -52,7 +52,7 @@ def superGrundyFixedLen(n, M=2, report=False):
 
 if __name__ == "__main__":
     import sys
-    MAX_CALCULATION = 60
+    MAX_CALCULATION = 100
     REPORT = False
     if len(sys.argv) < 3:
         print "Usage:", sys.argv[0], "<mode> <M>"

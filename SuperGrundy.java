@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class SuperGrundy {
 
     public static boolean report = false;
-    public static int MAX_CALCULATION = 60;
+    public static int MAX_CALCULATION = 300;
 
     private static HashMap<Integer, Integer> cachedSG =
         new HashMap<Integer, Integer>();
@@ -22,25 +22,12 @@ public class SuperGrundy {
         return ns;
     }
 
-    public static boolean checkSlope(ArrayList<Integer> l) {
-        int last = Integer.MAX_VALUE;
-        for(Integer i : l) {
-            if(!(last > i)) {
-                return false;
-            }
-            last = i;
-        }
-        return true;
-    }
-
     public static ArrayList<ArrayList<Integer>> partitionFixed(int n, int len) {
-        ArrayList<ArrayList<Integer>> x = partition(n, n, new ArrayList<Integer>());
-        // We don't want the trivial one element partition.
-        x.remove(0);
-        // Remove permutations which are not of correct length or have repeat elements.
+        ArrayList<ArrayList<Integer>> x = partition(n, n, new ArrayList<Integer>(), len);
+        // Remove permutations which are not of correct length.
         ArrayList<ArrayList<Integer>> purified = new ArrayList<ArrayList<Integer>>();
         for(ArrayList<Integer> l : x) {
-            if(l.size() == len && checkSlope(l)) {
+            if(l.size() == len) {
                 purified.add(l);
             }
         }
@@ -52,43 +39,42 @@ public class SuperGrundy {
     }
 
     public static ArrayList<ArrayList<Integer>> partitionAny(int n, int maxLen) {
-        ArrayList<ArrayList<Integer>> x = partition(n, n, new ArrayList<Integer>());
+        ArrayList<ArrayList<Integer>> x = partition(n, n, new ArrayList<Integer>(), maxLen);
         // We don't want the trivial one element partition.
         x.remove(0);
-        // Remove permutations which are too long or have repeat elements.
-        ArrayList<ArrayList<Integer>> purified = new ArrayList<ArrayList<Integer>>();
-        for(ArrayList<Integer> l : x) {
-            if(l.size() <= maxLen && checkSlope(l)) {
-                purified.add(l);
-            }
-        }
         if(report) {
-            System.out.println("Partitions of " + n + ": " + purified);
+            System.out.println("Partitions of " + n + ": " + x);
         }
-
-        return purified;
+        return x;
     }
 
     // Suppress the warnings about unchecked casts in this method
     // (we're casting the results of 'clone' and should be safe)
     @SuppressWarnings("unchecked")
     public static ArrayList<ArrayList<Integer>> partition(int n, int max,
-            ArrayList<Integer> prefix)
+            ArrayList<Integer> prefix, int maxLen)
     {
         ArrayList<ArrayList<Integer>> l = new ArrayList<ArrayList<Integer>>();
-        if (n == 0) {
+
+        // There's nothing left to partition so we're done.
+        if(n == 0) {
             l.add(prefix);
             return l;
         }
 
-        for (int i = Math.min(max, n); i >= 1; i--) {
+        // We're going to get a partition that's too long. Stop.
+        if(prefix.size() >= maxLen) {
+            return l;
+        }
+
+        for(int i = Math.min(max, n); i >= 1; i--) {
             // Ensure the slope. There might be a better (non-branching) way of doing this, but this works.
             if(prefix.size() > 0 && i == prefix.get(prefix.size()-1)) {
                 continue;
             }
             ArrayList<Integer> newPrefix = (ArrayList<Integer>)prefix.clone();
             newPrefix.add(i);
-            for(ArrayList<Integer> m : partition(n-i, i, newPrefix)) {
+            for(ArrayList<Integer> m : partition(n-i, i, newPrefix, maxLen)) {
                 l.add(m);
             }
         }
